@@ -1,0 +1,188 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Controle de Compras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#090f1a;--card:#111827;--card-2:#162033;--field:#0b1220;--text:#e5eefb;--muted:#93a4ba;--line:#263449;--green:#14b8a6;--blue:#60a5fa;--amber:#f59e0b;--red:#f87171;--shadow:0 20px 60px rgba(0,0,0,.45)}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}button,input,select{font:inherit}button{border:0;cursor:pointer}
+    .app{min-height:100vh;padding:24px}.wrap{max-width:1320px;margin:auto}.top{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center;margin-bottom:20px}
+    .brand{display:flex;gap:12px;align-items:center}.logo{width:54px;height:54px;border-radius:16px;background:#0f766e;display:grid;place-items:center;color:#fff;font-weight:800}.brand h1{font-family:Outfit,sans-serif;font-size:1.6rem;margin:0}.sync{color:var(--muted);font-size:.82rem}
+    .month,.actions,.heading,.modal-head,.modal-actions{display:flex;align-items:center;gap:10px}.month{justify-content:center;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px;box-shadow:var(--shadow)}.month strong{min-width:155px;text-align:center;text-transform:lowercase}.actions{justify-content:flex-end}
+    .btn,.icon,.primary,.secondary,.danger{min-height:38px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 14px}.btn,.icon,.secondary{background:var(--card);border:1px solid var(--line);color:var(--text)}.btn:hover,.icon:hover,.secondary:hover{background:var(--card-2)}.icon{width:38px;padding:0}.primary{background:var(--green);color:#031712;font-weight:800}.danger{background:#2a1117;border:1px solid #7f1d1d;color:var(--red)}
+    .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}.metric,.panel{background:var(--card);border:1px solid var(--line);border-radius:8px}.metric{padding:18px;display:grid;gap:4px}.metric span,.muted,small{color:var(--muted)}.metric strong{font-size:1.45rem}
+    .grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(310px,.9fr);gap:16px}.panel{padding:18px}.heading{justify-content:space-between;align-items:flex-start;margin-bottom:16px}.heading h2,.panel h3{font-family:Outfit,sans-serif;margin:0}.side{display:grid;gap:16px;align-content:start}
+    label{display:grid;gap:6px;color:var(--muted);font-size:.92rem}input,select{width:100%;min-height:40px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--field);color:var(--text)}input:focus,select:focus{outline:2px solid rgba(20,184,166,.35);border-color:var(--green)}.compact{max-width:240px}
+    .empty{min-height:170px;display:grid;place-items:center;align-content:center;text-align:center;gap:8px;color:var(--muted)}.list{display:grid;gap:10px}.card-group{border:1px solid var(--line);border-radius:8px;background:rgba(17,24,39,.72);overflow:hidden}.card-toggle{width:100%;min-height:56px;display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;padding:12px;background:var(--card);border-bottom:1px solid var(--line);color:var(--text);text-align:left}.card-toggle:hover{background:var(--card-2)}.card-toggle .arrow{font-size:1.05rem;color:var(--muted);transition:transform .18s ease}.card-group.open .arrow{transform:rotate(90deg)}.card-total{color:var(--green);font-weight:800}.card-items{display:none;padding:10px}.card-group.open .card-items{display:grid;gap:10px}.item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card-2)}.item.paid{opacity:.62}.item.paid strong{text-decoration:line-through}.check{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--field);color:var(--green)}.main{display:grid;gap:3px}.right{display:flex;align-items:center;gap:8px}
+    .credit{margin-top:12px;min-height:150px;border-radius:8px;padding:18px;display:grid;align-content:space-between;color:#fff;background:linear-gradient(135deg,rgba(255,255,255,.22),transparent 55%),var(--c,#0f766e)}.credit small{color:rgba(255,255,255,.82)}.credit strong{font-size:1.45rem}
+    .rows{display:grid;gap:10px;margin-top:12px}.row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}.dot{width:10px;height:10px;border-radius:99px}.toast,.alert{position:fixed;right:18px;z-index:50;border-radius:8px;padding:12px 14px;box-shadow:var(--shadow)}.toast{top:18px;background:#064e3b;color:#fff}.alert{bottom:18px;background:#2a1117;border:1px solid #7f1d1d;color:#fecaca;max-width:520px}
+    .backdrop{position:fixed;inset:0;background:rgba(2,6,23,.72);display:grid;place-items:center;padding:18px;z-index:30}.modal{width:min(640px,100%);max-height:calc(100vh - 36px);overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px;box-shadow:var(--shadow)}.modal-head{justify-content:space-between;margin-bottom:16px}.modal-head h3{margin:0;font-family:Outfit,sans-serif}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.wide{grid-column:1/-1}.checks{display:flex;gap:8px;align-items:center;color:var(--muted)}.checks input{width:18px;min-height:18px}.inline{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.inline input{width:78px}.modal-actions{justify-content:flex-end;margin-top:14px}.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.tags span{border:1px solid var(--line);background:var(--card-2);border-radius:8px;padding:8px 10px}.swatches{display:flex;flex-wrap:wrap;gap:8px}.swatches button{width:30px;height:30px;border-radius:8px;border:2px solid transparent}.swatches .sel{border-color:#e5eefb}.card-row{display:grid;grid-template-columns:auto 1fr 150px;gap:10px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:8px;background:var(--card-2)}
+    @media(max-width:980px){.top,.summary,.grid{grid-template-columns:1fr}.actions,.month{justify-content:flex-start}}@media(max-width:640px){.app{padding:14px}.form,.item,.card-row{grid-template-columns:1fr}.card-toggle{grid-template-columns:auto 1fr;}.card-total{grid-column:2}.actions,.heading{flex-wrap:wrap}.primary,.secondary,.btn{width:100%}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="wrap">
+      <header class="top">
+        <div class="brand"><div class="logo">R$</div><div><h1>Controle de Compras</h1><div id="sync" class="sync">Sincronizando...</div></div></div>
+        <div class="month"><button class="icon" id="prev">&lsaquo;</button><strong id="monthLabel"></strong><button class="icon" id="next">&rsaquo;</button></div>
+        <div class="actions"><button class="btn" id="peopleBtn">Pessoas</button><button class="btn" id="cardsBtn">Cartões</button><button class="btn" id="settingsBtn">&#9881;</button></div>
+      </header>
+      <section class="summary">
+        <div class="metric"><span>Total pendente no mês</span><strong id="total">R$ 0,00</strong></div>
+        <div class="metric"><span>Quem gastou mais</span><strong id="topPerson">Ninguém</strong><small id="topPersonValue">R$ 0,00</small></div>
+        <div class="metric"><span>Cartão mais utilizado</span><strong id="topCard">Nenhum</strong><small id="topCardValue">R$ 0,00</small></div>
+      </section>
+      <main class="grid">
+        <section class="panel">
+          <div class="heading"><div><h2>Compras e Parcelas do Mês</h2><label class="compact">Comprador<select id="personFilter"></select></label></div><button class="primary" id="newPurchase">+ Nova Compra</button></div>
+          <div id="purchases"></div>
+        </section>
+        <aside class="side">
+          <section class="panel"><div class="heading"><h3>Cartões de Crédito</h3><select id="cardSelect"></select></div><div id="cardBox"></div></section>
+          <section class="panel"><h3>Gastos por Pessoa</h3><div id="personTotals" class="rows"></div></section>
+          <section class="panel"><h3>Gastos por Cartão</h3><div id="cardTotals" class="rows"></div></section>
+          <section class="panel"><h3>Gastos por Pessoa em Cada Cartão</h3><div id="matrix" class="rows"></div></section>
+        </aside>
+      </main>
+    </div>
+  </div>
+  <div id="modalRoot"></div>
+  <script type="module">
+    const SUPABASE_URL = 'https://uigdxnjccywikgwzfibd.supabase.co';
+    const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpZ2R4bmpjY3l3aWtnd3pmaWJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MTc2NjksImV4cCI6MjA5NTk5MzY2OX0.792kMuWTEwVL1cLygE_Z5bGqVUiHTT8hhoc1lUDMLgM';
+    const headers = { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}`, 'Content-Type': 'application/json' };
+    const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    const monthFmt = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' });
+    const colors = ['#6366f1','#14b8a6','#f97316','#ef4444','#8b5cf6','#06b6d4','#22c55e','#eab308','#ec4899','#64748b'];
+    let date = new Date(), people = [], cards = [], installments = [], personFilter = 'all', selectedCard = '', openCardGroups = new Set(), purchaseGroupsReady = false;
+    const $ = (id) => document.getElementById(id);
+    const money = (v) => fmt.format(Number(v || 0));
+    const iso = (d) => d.toISOString().slice(0, 10);
+    const escapeHtml = (s='') => String(s).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+    const monthBounds = () => ({ start: iso(new Date(date.getFullYear(), date.getMonth(), 1)), end: iso(new Date(date.getFullYear(), date.getMonth() + 1, 0)) });
+    const addMonths = (d, n) => new Date(d.getFullYear(), d.getMonth() + n, 1);
+    const targetDate = (offset, card) => { const d = addMonths(date, offset); const day = Number(card?.payment_day || 1); d.setDate(Math.min(day, new Date(d.getFullYear(), d.getMonth()+1, 0).getDate())); return iso(d); };
+    async function api(path, options = {}) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { ...options, headers: { ...headers, Prefer: 'return=representation', ...(options.headers || {}) } });
+      if (!res.ok) throw new Error(await res.text());
+      return res.status === 204 ? null : res.json();
+    }
+    async function load() {
+      $('sync').textContent = 'Sincronizando...';
+      try {
+        const { start, end } = monthBounds();
+        [people, cards, installments] = await Promise.all([
+          api('people?select=*&order=name.asc'),
+          api('cards?select=*&order=name.asc'),
+          api(`installments?select=*,purchase:purchases(id,name,total_amount,installments_count,purchase_date,is_subscription,person:people(*),card:cards(*))&target_date=gte.${start}&target_date=lte.${end}&order=target_date.asc`)
+        ]);
+        selectedCard ||= cards[0]?.id || '';
+        render();
+        $('sync').textContent = 'Sincronizado';
+      } catch (err) {
+        $('sync').textContent = 'Erro ao sincronizar';
+        showError(err.message);
+      }
+    }
+    function totals(rows, getter) {
+      const map = new Map();
+      rows.forEach((i) => { const obj = getter(i); if (!obj) return; const cur = map.get(obj.id) || { ...obj, total: 0 }; cur.total += Number(i.amount || 0); map.set(obj.id, cur); });
+      return [...map.values()].sort((a,b) => b.total - a.total);
+    }
+    function render() {
+      $('monthLabel').textContent = monthFmt.format(date);
+      $('personFilter').innerHTML = `<option value="all">Todos os compradores</option>${people.map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('')}`;
+      $('personFilter').value = personFilter;
+      $('cardSelect').innerHTML = cards.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+      $('cardSelect').value = selectedCard;
+      const visible = installments.filter(i => personFilter === 'all' || i.purchase?.person?.id === personFilter);
+      const pending = visible.filter(i => !i.is_paid);
+      const pTotals = totals(pending, i => i.purchase?.person && { id:i.purchase.person.id, name:i.purchase.person.name });
+      const cTotals = totals(pending, i => i.purchase?.card ? { id:i.purchase.card.id, name:i.purchase.card.name, color_hex:i.purchase.card.color_hex } : { id:'cash', name:'Dinheiro / Pix', color_hex:'#64748b' });
+      $('total').textContent = money(pending.reduce((s,i)=>s+Number(i.amount||0),0));
+      $('topPerson').textContent = pTotals[0]?.name || 'Ninguém'; $('topPersonValue').textContent = money(pTotals[0]?.total || 0);
+      $('topCard').textContent = cTotals[0]?.name || 'Nenhum'; $('topCardValue').textContent = money(cTotals[0]?.total || 0);
+      $('purchases').innerHTML = renderPurchaseGroups(visible);
+      $('personTotals').innerHTML = pTotals.length ? pTotals.map(r => row(r)).join('') : '<p class="muted">Nenhum valor pendente neste mês.</p>';
+      $('cardTotals').innerHTML = cTotals.length ? cTotals.map(r => row(r)).join('') : '<p class="muted">Nenhum valor pendente com cartão neste mês.</p>';
+      const card = cards.find(c => c.id === selectedCard);
+      const totalCard = cTotals.find(c => c.id === selectedCard)?.total || 0;
+      $('cardBox').innerHTML = card ? `<div class="credit" style="--c:${card.color_hex||'#0f766e'}"><span>${escapeHtml(card.name)}</span><small>Dia de pagamento ${card.payment_day||10}</small><strong>${money(totalCard)}</strong><small>Pendente no mês</small></div>` : '<div class="empty">Nenhum cartão cadastrado.</div>';
+      renderMatrix(pending);
+      bindDynamic();
+    }
+    function row(r) { return `<div class="row"><span class="dot" style="background:${r.color_hex||'#0f766e'}"></span><strong>${escapeHtml(r.name)}</strong><span>${money(r.total)}</span></div>`; }
+    function renderPurchaseGroups(rows) {
+      if (!rows.length) return `<div class="empty"><strong>Nenhuma compra ou parcela registrada para este mes.</strong><small>Clique em "Nova Compra" para registrar uma despesa.</small></div>`;
+      const groups = new Map();
+      rows.forEach(i => {
+        const card = i.purchase?.card;
+        const id = card?.id || 'cash';
+        if (!groups.has(id)) groups.set(id, { id, name: card?.name || 'Dinheiro / Pix', color: card?.color_hex || '#64748b', rows: [], pending: 0 });
+        const group = groups.get(id);
+        group.rows.push(i);
+        if (!i.is_paid) group.pending += Number(i.amount || 0);
+      });
+      if (!purchaseGroupsReady && groups.size) {
+        openCardGroups.add(groups.keys().next().value);
+        purchaseGroupsReady = true;
+      }
+      return `<div class="list">${[...groups.values()].map(group => {
+        const open = openCardGroups.has(group.id);
+        return `<section class="card-group ${open ? 'open' : ''}">
+          <button class="card-toggle" data-card-toggle="${group.id}" aria-expanded="${open ? 'true' : 'false'}">
+            <span class="arrow">›</span>
+            <span><span class="dot" style="background:${group.color}"></span> <strong>${escapeHtml(group.name)}</strong><br><small>${group.rows.length} compra${group.rows.length === 1 ? '' : 's'} no mês</small></span>
+            <span class="card-total">${money(group.pending)}</span>
+            <small>pendente</small>
+          </button>
+          <div class="card-items">
+            ${group.rows.map(i => `<article class="item ${i.is_paid?'paid':''}"><button class="check" data-paid="${i.id}">${i.is_paid?'✓':''}</button><div class="main"><strong>${escapeHtml(i.purchase?.name||'Compra')}</strong><span>${escapeHtml(i.purchase?.person?.name||'Sem pessoa')} · ${escapeHtml(i.purchase?.card?.name||'Dinheiro / Pix')}</span><small>Parcela ${i.installment_number}/${i.purchase?.installments_count||1} · venc. ${new Date(i.target_date+'T12:00:00').toLocaleDateString('pt-BR')}</small></div><div class="right"><strong>${money(i.amount)}</strong><button class="danger" data-del="${i.purchase_id}">Excluir</button></div></article>`).join('')}
+          </div>
+        </section>`;
+      }).join('')}</div>`;
+    }
+    function renderMatrix(pending) {
+      const map = new Map();
+      pending.forEach(i => { const p=i.purchase?.person, c=i.purchase?.card; if(!p||!c)return; const cur=map.get(p.id)||{name:p.name,cards:new Map()}; cur.cards.set(c.name,(cur.cards.get(c.name)||0)+Number(i.amount||0)); map.set(p.id,cur); });
+      $('matrix').innerHTML = map.size ? [...map.values()].map(r=>`<div><strong>${escapeHtml(r.name)}</strong><br>${[...r.cards].map(([n,v])=>`${escapeHtml(n)}: ${money(v)}`).join(' &middot; ')}</div>`).join('') : '<p class="muted">Sem valores pendentes para detalhar.</p>';
+    }
+    function bindDynamic() {
+      document.querySelectorAll('[data-card-toggle]').forEach(b => b.onclick = () => { const id = b.dataset.cardToggle; openCardGroups.has(id) ? openCardGroups.delete(id) : openCardGroups.add(id); render(); });
+      document.querySelectorAll('[data-paid]').forEach(b => b.onclick = () => togglePaid(b.dataset.paid));
+      document.querySelectorAll('[data-del]').forEach(b => b.onclick = () => deletePurchase(b.dataset.del));
+    }
+    function modal(title, body) { $('modalRoot').innerHTML = `<div class="backdrop"><div class="modal"><div class="modal-head"><h3>${title}</h3><button class="icon" id="closeModal">&times;</button></div>${body}</div></div>`; $('closeModal').onclick=closeModal; }
+    function closeModal(){ $('modalRoot').innerHTML=''; }
+    function showError(msg){ $('modalRoot').insertAdjacentHTML('beforeend', `<div class="alert">${escapeHtml(msg).slice(0,500)}</div>`); setTimeout(()=>document.querySelector('.alert')?.remove(), 5000); }
+    function toast(msg){ document.body.insertAdjacentHTML('beforeend', `<div class="toast">${msg}</div>`); setTimeout(()=>document.querySelector('.toast')?.remove(), 2400); }
+    async function togglePaid(id){ const i=installments.find(x=>x.id===id); await api(`installments?id=eq.${id}`, { method:'PATCH', body:JSON.stringify({ is_paid:!i.is_paid, paid_at:!i.is_paid ? new Date().toISOString() : null }) }); load(); }
+    async function deletePurchase(id){ if(!confirm('Excluir esta compra e suas parcelas?'))return; await api(`installments?purchase_id=eq.${id}`, { method:'DELETE' }); await api(`purchases?id=eq.${id}`, { method:'DELETE' }); toast('Compra excluída.'); load(); }
+    function purchaseModal(){
+      modal('Adicionar Nova Compra', `<form class="form" id="purchaseForm"><label class="wide">Nome da Compra *<input name="name" placeholder="Ex: Supermercado Semanal" required></label><label>Valor Total (R$) *<input name="amount" type="number" min="0" step="0.01" required></label><label>Quem comprou? *<select name="person_id" required><option value="">Selecione...</option>${people.map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('')}</select></label><label>Cartão Usado<select name="card_id"><option value="">Dinheiro / Pix</option>${cards.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('')}</select></label><label class="checks wide"><input name="parcel" type="checkbox"> A compra é parcelada</label><label class="checks wide"><input name="sub" type="checkbox"> Compra de assinatura</label><div id="extra" class="wide"></div><div class="modal-actions wide"><button type="button" class="secondary" id="cancel">Cancelar</button><button class="primary">Registrar Compra</button></div></form>`);
+      const f=$('purchaseForm'), extra=$('extra'), amount=f.amount.previousSibling;
+      f.parcel.onchange=()=>{ if(f.parcel.checked) f.sub.checked=false; amount.textContent=f.parcel.checked?'Valor da Parcela (R$) *':'Valor Total (R$) *'; extra.innerHTML=f.parcel.checked?'<div class="inline"><span>A partir da</span><input name="start" type="number" min="1" value="1"><span>&ordf; parcela, de</span><input name="count" type="number" min="1" value="2"><span>total</span></div>':''; };
+      f.sub.onchange=()=>{ if(f.sub.checked) f.parcel.checked=false; amount.textContent=f.sub.checked?'Valor Mensal (R$) *':'Valor Total (R$) *'; extra.innerHTML=f.sub.checked?'<div class="inline"><span>Lançar por</span><input name="months" type="number" min="1" value="12"><span>meses</span></div>':''; };
+      $('cancel').onclick=closeModal; f.onsubmit=submitPurchase;
+    }
+    async function submitPurchase(e){
+      e.preventDefault(); const f=e.target, amount=Number(f.amount.value), card=cards.find(c=>c.id===f.card_id.value);
+      const isSub=f.sub.checked, isParcel=f.parcel.checked, count=isSub?Number(f.months.value):isParcel?Number(f.count.value):1, start=isParcel?Number(f.start.value):1;
+      const total=isParcel?amount*count:amount;
+      const [purchase]=await api('purchases', { method:'POST', body:JSON.stringify({ name:f.name.value.trim(), total_amount:total, installments_count:count, person_id:f.person_id.value, card_id:f.card_id.value||null, purchase_date:iso(date), is_subscription:isSub }) });
+      const rows=Array.from({length:count-start+1},(_,idx)=>({ purchase_id:purchase.id, installment_number:start+idx, amount:isParcel||isSub?amount:total, target_date:targetDate(idx,card), is_paid:false, paid_at:null }));
+      await api('installments', { method:'POST', body:JSON.stringify(rows) }); closeModal(); toast('Compra registrada.'); load();
+    }
+    function peopleModal(){ modal('Gerenciar Pessoas', `<form class="form" id="peopleForm"><input class="wide" name="name" placeholder="Nome da pessoa"><div class="modal-actions wide"><button class="primary">Adicionar</button></div></form><h4>Pessoas Cadastradas:</h4><div class="tags">${people.map(p=>`<span>${escapeHtml(p.name)}</span>`).join('')}</div><div class="modal-actions"><button class="secondary" id="done">Fechar</button></div>`); $('done').onclick=closeModal; $('peopleForm').onsubmit=async(e)=>{e.preventDefault(); const name=e.target.name.value.trim(); if(name) await api('people',{method:'POST',body:JSON.stringify({name})}); toast('Pessoa adicionada.'); closeModal(); load();}; }
+    function cardsModal(){ modal('Gerenciar Cartões', `<form class="form" id="cardForm"><label class="wide">Nome do cartão<input name="name" placeholder="Nome do cartão (ex: Nubank)"></label><label>Dia de pagamento<input name="payment_day" type="number" min="1" max="31" value="10"></label><div class="wide"><span class="muted">Escolha a cor do cartão:</span><div class="swatches">${colors.map((c,i)=>`<button type="button" data-color="${c}" class="${i===0?'sel':''}" style="background:${c}"></button>`).join('')}</div><input name="color_hex" value="#6366f1"></div><div class="modal-actions wide"><button class="primary">Adicionar</button></div></form><h4>Cartões Cadastrados:</h4>${cards.map(c=>`<div class="card-row"><span class="dot" style="background:${c.color_hex||'#64748b'}"></span><strong>${escapeHtml(c.name)}</strong><label>Dia de pagamento<input data-card-day="${c.id}" type="number" min="1" max="31" value="${c.payment_day||10}"></label></div>`).join('')}<div class="modal-actions"><button class="secondary" id="done">Fechar</button></div>`); $('done').onclick=closeModal; document.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-color]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');$('cardForm').color_hex.value=b.dataset.color;}); document.querySelectorAll('[data-card-day]').forEach(i=>i.onblur=()=>api(`cards?id=eq.${i.dataset.cardDay}`,{method:'PATCH',body:JSON.stringify({payment_day:Number(i.value||10)})}).then(load)); $('cardForm').onsubmit=async(e)=>{e.preventDefault(); const f=e.target; if(f.name.value.trim()) await api('cards',{method:'POST',body:JSON.stringify({name:f.name.value.trim(),payment_day:Number(f.payment_day.value||10),color_hex:f.color_hex.value})}); toast('Cartão cadastrado.'); closeModal(); load();}; }
+    $('prev').onclick=()=>{date=addMonths(date,-1);load()}; $('next').onclick=()=>{date=addMonths(date,1);load()}; $('personFilter').onchange=(e)=>{personFilter=e.target.value;render()}; $('cardSelect').onchange=(e)=>{selectedCard=e.target.value;render()}; $('newPurchase').onclick=purchaseModal; $('peopleBtn').onclick=peopleModal; $('cardsBtn').onclick=cardsModal; $('settingsBtn').onclick=()=>modal('Configurações','<p class="muted">Projeto reconstruído e conectado ao Supabase. Antes de publicar, ative RLS e políticas nas tabelas.</p><div class="modal-actions"><button class="secondary" id="done">Fechar</button></div>') || ($('done').onclick=closeModal);
+    load();
+  </script>
+</body>
+</html>
+
