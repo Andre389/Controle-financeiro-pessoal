@@ -14,4 +14,3 @@ Como publicar no projeto antigo:
 3. Publique em Production.
 
 Observacao: o app usa apenas a chave publica anon do Supabase. Nao inclui `service_role`.
-Atualizado para deploy automático.
